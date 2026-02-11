@@ -1,0 +1,10 @@
+version: v2
+name: buf.build/mindmain/eattura-proto
+deps:
+  - buf.build/bufbuild/protovalidate
+lint:
+  use:
+    - DEFAULT
+breaking:
+  use:
+    - FILE
