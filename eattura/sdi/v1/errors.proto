@@ -1,0 +1,343 @@
+syntax = "proto3";
+
+package eattura.sdi.v1;
+
+import "eattura/sdi/v1/options.proto";
+
+// ============================================================================
+// Questo enum e le relative definizioni sono utilizzati ESCLUSIVAMENTE a livello
+// di documentazione. Non sono parte del tracciato XML della fattura elettronica.
+// Lo scopo e' fornire un catalogo strutturato dei codici di errore restituiti
+// dal Sistema di Interscambio (SdI) dell'Agenzia delle Entrate, cosi' che chi
+// implementa un client possa mapparli e gestirli nella propria logica applicativa.
+// ============================================================================
+
+// Codice di errore restituito dal Sistema di Interscambio (SdI).
+enum SDIErrorCode {
+  SDI_ERROR_CODE_UNSPECIFIED = 0;
+
+  // --- Verifica del nome file ---
+
+  SDI_ERROR_CODE_00001 = 1 [
+    (sdi).value = "00001",
+    (sdi).doc = "Nome file non valido"
+  ];
+  SDI_ERROR_CODE_00002 = 2 [
+    (sdi).value = "00002",
+    (sdi).doc = "Nome file duplicato"
+  ];
+
+  // --- Verifica delle dimensioni del file ---
+
+  SDI_ERROR_CODE_00003 = 3 [
+    (sdi).value = "00003",
+    (sdi).doc = "Le dimensioni del file superano quelle ammesse"
+  ];
+
+  // --- Verifica di autenticita' del certificato di firma ---
+
+  SDI_ERROR_CODE_00100 = 100 [
+    (sdi).value = "00100",
+    (sdi).doc = "Certificato di firma scaduto"
+  ];
+  SDI_ERROR_CODE_00101 = 101 [
+    (sdi).value = "00101",
+    (sdi).doc = "Certificato di firma revocato"
+  ];
+
+  // --- Verifica di integrita' del documento ---
+
+  SDI_ERROR_CODE_00102 = 102 [
+    (sdi).value = "00102",
+    (sdi).doc = "La firma elettronica apposta al file non risulta valida"
+  ];
+
+  // --- Verifica di conformita' del formato fattura ---
+
+  SDI_ERROR_CODE_00103 = 103 [
+    (sdi).value = "00103",
+    (sdi).doc = "Alla firma elettronica apposta al file manca il riferimento temporale"
+  ];
+  SDI_ERROR_CODE_00104 = 104 [
+    (sdi).value = "00104",
+    (sdi).doc = "La CA che ha emesso il certificato di firma non risulta nell'elenco delle CA affidabili"
+  ];
+  SDI_ERROR_CODE_00105 = 105 [
+    (sdi).value = "00105",
+    (sdi).doc = "Il riferimento temporale della firma elettronica e' successivo alla data di ricezione del file"
+  ];
+  SDI_ERROR_CODE_00106 = 106 [
+    (sdi).value = "00106",
+    (sdi).doc = "Il file compresso e' vuoto oppure non e' leggibile"
+  ];
+  SDI_ERROR_CODE_00107 = 107 [
+    (sdi).value = "00107",
+    (sdi).doc = "Il certificato di firma non e' valido"
+  ];
+  SDI_ERROR_CODE_00200 = 200 [
+    (sdi).value = "00200",
+    (sdi).doc = "File non conforme al formato"
+  ];
+  SDI_ERROR_CODE_00201 = 201 [
+    (sdi).value = "00201",
+    (sdi).doc = "Errori di formato presenti nel file superano il numero massimo previsto (50)"
+  ];
+
+  // --- Verifica di validita' del contenuto della fattura ---
+
+  SDI_ERROR_CODE_00300 = 300 [
+    (sdi).value = "00300",
+    (sdi).doc = "1.1.1.2 <IdCodice> non valido"
+  ];
+  SDI_ERROR_CODE_00301 = 301 [
+    (sdi).value = "00301",
+    (sdi).doc = "1.2.1.1.2 <IdCodice> non valido (ordinarie) / 1.2.1.2 <IdCodice> non valido (semplificate)"
+  ];
+  SDI_ERROR_CODE_00303 = 303 [
+    (sdi).value = "00303",
+    (sdi).doc = "1.3.1.1.2 <IdCodice> o 1.4.4.1.2 <IdCodice> non valido (ordinarie) / 1.2.8.1.2 <IdCodice> o 1.3.2.6.1.2 <IdCodice> non valido (semplificate)"
+  ];
+  SDI_ERROR_CODE_00305 = 305 [
+    (sdi).value = "00305",
+    (sdi).doc = "1.4.1.1.2 <IdCodice> non valido (ordinarie) / 1.3.1.1.2 <IdCodice> non valido (semplificate)"
+  ];
+  SDI_ERROR_CODE_00306 = 306 [
+    (sdi).value = "00306",
+    (sdi).doc = "1.4.1.2 <CodiceFiscale> non valido (ordinarie) / 1.3.1.2 <CodiceFiscale> non valido (semplificate)"
+  ];
+  SDI_ERROR_CODE_00311 = 311 [
+    (sdi).value = "00311",
+    (sdi).doc = "1.1.4 <CodiceDestinatario> non valido"
+  ];
+  SDI_ERROR_CODE_00312 = 312 [
+    (sdi).value = "00312",
+    (sdi).doc = "1.1.4 <CodiceDestinatario> non attivo"
+  ];
+  SDI_ERROR_CODE_00313 = 313 [
+    (sdi).value = "00313",
+    (sdi).doc = "1.1.4 <CodiceDestinatario> valorizzato con XXXXXXX ammesso solo per soggetti non residenti"
+  ];
+  SDI_ERROR_CODE_00320 = 320 [
+    (sdi).value = "00320",
+    (sdi).doc = "1.2.1.1 <IdFiscaleIVA> e 1.2.1.2 <CodiceFiscale> non coerenti (cedente/prestatore)"
+  ];
+  SDI_ERROR_CODE_00321 = 321 [
+    (sdi).value = "00321",
+    (sdi).doc = "1.2.1.2 <CodiceFiscale> di soggetto non partecipante al gruppo IVA (cedente/prestatore)"
+  ];
+  SDI_ERROR_CODE_00322 = 322 [
+    (sdi).value = "00322",
+    (sdi).doc = "1.2.1.2 <CodiceFiscale> non presente a fronte di 1.2.1.1 <IdFiscaleIVA> di gruppo IVA (cedente/prestatore)"
+  ];
+  SDI_ERROR_CODE_00323 = 323 [
+    (sdi).value = "00323",
+    (sdi).doc = "1.2.1.1.2 <IdCodice> corrispondente a una partita IVA cessata da oltre 5 anni"
+  ];
+  SDI_ERROR_CODE_00324 = 324 [
+    (sdi).value = "00324",
+    (sdi).doc = "1.4.1.1 <IdFiscaleIVA> e 1.4.1.2 <CodiceFiscale> non coerenti (cessionario/committente)"
+  ];
+  SDI_ERROR_CODE_00325 = 325 [
+    (sdi).value = "00325",
+    (sdi).doc = "1.4.1.2 <CodiceFiscale> di soggetto non partecipante al gruppo IVA (cessionario/committente)"
+  ];
+  SDI_ERROR_CODE_00326 = 326 [
+    (sdi).value = "00326",
+    (sdi).doc = "1.4.1.2 <CodiceFiscale> non presente a fronte di 1.4.1.1 <IdFiscaleIVA> di gruppo IVA (cessionario/committente)"
+  ];
+  SDI_ERROR_CODE_00330 = 330 [
+    (sdi).value = "00330",
+    (sdi).doc = "1.1.6 <PECDestinatario> contenente un valore non ammesso"
+  ];
+
+  // --- Verifica di coerenza sul contenuto ---
+
+  SDI_ERROR_CODE_00400 = 400 [
+    (sdi).value = "00400",
+    (sdi).doc = "<Natura> non presente a fronte di <AliquotaIVA> pari a zero"
+  ];
+  SDI_ERROR_CODE_00401 = 401 [
+    (sdi).value = "00401",
+    (sdi).doc = "<Natura> presente a fronte di <AliquotaIVA> diversa da zero"
+  ];
+  SDI_ERROR_CODE_00403 = 403 [
+    (sdi).value = "00403",
+    (sdi).doc = "2.1.1.3 <Data> successiva alla data di ricezione"
+  ];
+  SDI_ERROR_CODE_00411 = 411 [
+    (sdi).value = "00411",
+    (sdi).doc = "2.1.1.5 <DatiRitenuta> non presente a fronte di 2.2.1.13 <Ritenuta> uguale a SI"
+  ];
+  SDI_ERROR_CODE_00413 = 413 [
+    (sdi).value = "00413",
+    (sdi).doc = "2.1.1.7.7 <Natura> non presente a fronte di 2.1.1.7.5 <AliquotaIVA> cassa previdenziale pari a zero"
+  ];
+  SDI_ERROR_CODE_00414 = 414 [
+    (sdi).value = "00414",
+    (sdi).doc = "2.1.1.7.7 <Natura> presente a fronte di 2.1.1.7.5 <AliquotaIVA> cassa previdenziale diversa da zero"
+  ];
+  SDI_ERROR_CODE_00415 = 415 [
+    (sdi).value = "00415",
+    (sdi).doc = "2.1.1.5 <DatiRitenuta> non presente a fronte di 2.1.1.7.6 <Ritenuta> cassa previdenziale uguale a SI"
+  ];
+  SDI_ERROR_CODE_00417 = 417 [
+    (sdi).value = "00417",
+    (sdi).doc = "1.4.1.1 <IdFiscaleIVA> e 1.4.1.2 <CodiceFiscale> non valorizzati (cessionario/committente)"
+  ];
+  SDI_ERROR_CODE_00418 = 418 [
+    (sdi).value = "00418",
+    (sdi).doc = "2.1.1.3 <Data> antecedente alla data del documento collegato"
+  ];
+  SDI_ERROR_CODE_00419 = 419 [
+    (sdi).value = "00419",
+    (sdi).doc = "2.2.2 <DatiRiepilogo> non presente in corrispondenza di almeno un valore di <AliquotaIVA>"
+  ];
+  SDI_ERROR_CODE_00420 = 420 [
+    (sdi).value = "00420",
+    (sdi).doc = "2.2.2.2 <Natura> con valore N6 a fronte di 2.2.2.7 <EsigibilitaIVA> uguale a S (scissione pagamenti)"
+  ];
+  SDI_ERROR_CODE_00421 = 421 [
+    (sdi).value = "00421",
+    (sdi).doc = "2.2.2.6 <Imposta> non calcolato secondo le regole definite nelle specifiche tecniche"
+  ];
+  SDI_ERROR_CODE_00422 = 422 [
+    (sdi).value = "00422",
+    (sdi).doc = "2.2.2.5 <ImponibileImporto> non calcolato secondo le regole definite nelle specifiche tecniche"
+  ];
+  SDI_ERROR_CODE_00423 = 423 [
+    (sdi).value = "00423",
+    (sdi).doc = "2.2.1.11 <PrezzoTotale> non calcolato secondo le regole definite nelle specifiche tecniche"
+  ];
+  SDI_ERROR_CODE_00424 = 424 [
+    (sdi).value = "00424",
+    (sdi).doc = "<AliquotaIVA> non indicata in termini percentuali"
+  ];
+  SDI_ERROR_CODE_00425 = 425 [
+    (sdi).value = "00425",
+    (sdi).doc = "2.1.1.4 <Numero> non contenente caratteri numerici"
+  ];
+  SDI_ERROR_CODE_00427 = 427 [
+    (sdi).value = "00427",
+    (sdi).doc = "1.1.4 <CodiceDestinatario> non coerente con 1.1.3 <FormatoTrasmissione>"
+  ];
+  SDI_ERROR_CODE_00428 = 428 [
+    (sdi).value = "00428",
+    (sdi).doc = "1.1.3 <FormatoTrasmissione> non coerente con il valore dell'attributo VERSION"
+  ];
+  SDI_ERROR_CODE_00429 = 429 [
+    (sdi).value = "00429",
+    (sdi).doc = "2.2.2.2 <Natura> non presente a fronte di 2.2.2.1 <AliquotaIVA> pari a zero nei DatiRiepilogo"
+  ];
+  SDI_ERROR_CODE_00430 = 430 [
+    (sdi).value = "00430",
+    (sdi).doc = "2.2.2.2 <Natura> presente a fronte di 2.2.2.1 <AliquotaIVA> diversa da zero nei DatiRiepilogo"
+  ];
+  SDI_ERROR_CODE_00437 = 437 [
+    (sdi).value = "00437",
+    (sdi).doc = "2.1.1.8.2 <Percentuale> e 2.1.1.8.3 <Importo> non presenti a fronte di 2.1.1.8.1 <Tipo> valorizzato (sconto/maggiorazione generale)"
+  ];
+  SDI_ERROR_CODE_00438 = 438 [
+    (sdi).value = "00438",
+    (sdi).doc = "2.2.1.10.2 <Percentuale> e 2.2.1.10.3 <Importo> non presenti a fronte di 2.2.1.10.1 <Tipo> valorizzato (sconto/maggiorazione linea)"
+  ];
+  SDI_ERROR_CODE_00443 = 443 [
+    (sdi).value = "00443",
+    (sdi).doc = "Non c'e' corrispondenza tra i valori di <AliquotaIVA> nelle linee di dettaglio/cassa previdenziale e nei DatiRiepilogo"
+  ];
+  SDI_ERROR_CODE_00444 = 444 [
+    (sdi).value = "00444",
+    (sdi).doc = "Non c'e' corrispondenza tra i valori di <Natura> nelle linee di dettaglio/cassa previdenziale e nei DatiRiepilogo"
+  ];
+  SDI_ERROR_CODE_00445 = 445 [
+    (sdi).value = "00445",
+    (sdi).doc = "Non e' piu' ammesso il valore generico N2, N3 o N6 come codice natura dell'operazione"
+  ];
+  SDI_ERROR_CODE_00460 = 460 [
+    (sdi).value = "00460",
+    (sdi).doc = "Importo totale superiore al limite previsto per le fatture semplificate (art. 21 bis DPR 633/72)"
+  ];
+  SDI_ERROR_CODE_00471 = 471 [
+    (sdi).value = "00471",
+    (sdi).doc = "Per il TipoDocumento indicato il cedente/prestatore non puo' essere uguale al cessionario/committente"
+  ];
+  SDI_ERROR_CODE_00472 = 472 [
+    (sdi).value = "00472",
+    (sdi).doc = "Per il TipoDocumento indicato il cedente/prestatore deve essere uguale al cessionario/committente (TD21, TD27)"
+  ];
+  SDI_ERROR_CODE_00473 = 473 [
+    (sdi).value = "00473",
+    (sdi).doc = "Per il TipoDocumento indicato il valore di 1.2.1.1.1 <IdPaese> non e' ammesso (TD17, TD18, TD19, TD28)"
+  ];
+  SDI_ERROR_CODE_00474 = 474 [
+    (sdi).value = "00474",
+    (sdi).doc = "Per il TipoDocumento indicato non sono ammesse linee con <AliquotaIVA> pari a zero (autofattura per splafonamento)"
+  ];
+  SDI_ERROR_CODE_00475 = 475 [
+    (sdi).value = "00475",
+    (sdi).doc = "Per il TipoDocumento indicato deve essere presente 1.4.1.1 <IdFiscaleIVA> del cessionario/committente"
+  ];
+  SDI_ERROR_CODE_00476 = 476 [
+    (sdi).value = "00476",
+    (sdi).doc = "Gli elementi <IdPaese> di cedente e cessionario non possono essere entrambi diversi da IT"
+  ];
+  SDI_ERROR_CODE_00477 = 477 [
+    (sdi).value = "00477",
+    (sdi).doc = "Dichiarazione d'intento invalidata (art. 8 c.1 lett. c DPR 633/72)"
+  ];
+
+  // --- Verifiche di unicita' della fattura ---
+
+  SDI_ERROR_CODE_00404 = 404 [
+    (sdi).value = "00404",
+    (sdi).doc = "Fattura duplicata"
+  ];
+  SDI_ERROR_CODE_00409 = 409 [
+    (sdi).value = "00409",
+    (sdi).doc = "Fattura duplicata nel lotto"
+  ];
+}
+
+// Categoria logica di raggruppamento degli errori SdI.
+enum SDIErrorCategory {
+  SDI_ERROR_CATEGORY_UNSPECIFIED = 0;
+  SDI_ERROR_CATEGORY_FILE = 1 [
+    (sdi).value = "FILE",
+    (sdi).doc = "Errori relativi al file: nome, dimensioni (codici 00001-00003)"
+  ];
+  SDI_ERROR_CATEGORY_SIGNATURE = 2 [
+    (sdi).value = "SIGNATURE",
+    (sdi).doc = "Errori relativi alla firma elettronica e certificato (codici 00100-00107)"
+  ];
+  SDI_ERROR_CATEGORY_FORMAT = 3 [
+    (sdi).value = "FORMAT",
+    (sdi).doc = "Errori di conformita' del formato (codici 00103, 00105, 00106, 00200, 00201)"
+  ];
+  SDI_ERROR_CATEGORY_VALIDATION = 4 [
+    (sdi).value = "VALIDATION",
+    (sdi).doc = "Errori di validita' del contenuto: codici fiscali, partite IVA, codice destinatario (codici 00300-00330)"
+  ];
+  SDI_ERROR_CATEGORY_COHERENCE = 5 [
+    (sdi).value = "COHERENCE",
+    (sdi).doc = "Errori di coerenza sul contenuto: natura, aliquote, importi, date (codici 00400-00477)"
+  ];
+  SDI_ERROR_CATEGORY_DUPLICATE = 6 [
+    (sdi).value = "DUPLICATE",
+    (sdi).doc = "Errori di unicita' della fattura (codici 00404, 00409)"
+  ];
+}
+
+// Rappresentazione strutturata di un errore restituito dal Sistema di Interscambio.
+// Utilizzabile per mappare le notifiche di scarto ricevute dall'AdE.
+message SDIError {
+  // Codice originale AdE, es. "00400"
+  string code = 1;
+
+  // Descrizione testuale dall'AdE
+  string description = 2;
+
+  // Categoria per logica applicativa
+  SDIErrorCategory category = 3;
+
+  // Se applicabile, path dell'elemento XML problematico
+  string element_path = 4;
+}
