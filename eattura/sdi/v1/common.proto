@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package eattura.sdi.v1;
+
+import "buf/validate/validate.proto";
+import "eattura/sdi/v1/enums.proto";
+
+// IdFiscaleType - Identificativo fiscale (IdPaese + IdCodice)
+message IdFiscale {
+  string idPaese = 1 [(buf.validate.field).string = {pattern: "^[A-Z]{2}$"}];  // NazioneType
+  string idCodice = 2 [(buf.validate.field).string = {min_len: 1, max_len: 28}]; // CodiceType
+}
+
+// AnagraficaType - Dati anagrafici con scelta Denominazione o Nome+Cognome
+message Anagrafica {
+  oneof soggetto {
+    option (buf.validate.oneof).required = true;
+    string denominazione = 1 [(buf.validate.field).string = {min_len: 1, max_len: 80}]; // String80LatinType
+    PersonaFisica personaFisica = 2;
+  }
+  optional string titolo = 3 [(buf.validate.field).string = {min_len: 2, max_len: 10}];  // TitoloType
+  optional string codEORI = 4 [(buf.validate.field).string = {min_len: 13, max_len: 17}]; // CodEORIType
+}
+
+// Helper per la scelta Nome+Cognome in AnagraficaType
+message PersonaFisica {
+  string nome = 1 [(buf.validate.field).string = {min_len: 1, max_len: 60}];    // String60LatinType
+  string cognome = 2 [(buf.validate.field).string = {min_len: 1, max_len: 60}]; // String60LatinType
+}
+
+// IndirizzoType - Indirizzo completo
+message Indirizzo {
+  string indirizzo = 1 [(buf.validate.field).string = {min_len: 1, max_len: 60}];             // String60LatinType
+  optional string numeroCivico = 2 [(buf.validate.field).string = {min_len: 1, max_len: 8}];  // NumeroCivicoType
+  string CAP = 3 [(buf.validate.field).string = {pattern: "^[0-9]{5}$"}];                     // CAPType
+  string comune = 4 [(buf.validate.field).string = {min_len: 1, max_len: 60}];                // String60LatinType
+  optional string provincia = 5 [(buf.validate.field).string = {pattern: "^[A-Z]{2}$"}];      // ProvinciaType
+  string nazione = 6 [(buf.validate.field).string = {pattern: "^[A-Z]{2}$"}];                 // NazioneType default "IT"
+}
+
+// ContattiType - Contatti (telefono, fax, email)
+message Contatti {
+  optional string telefono = 1 [(buf.validate.field).string = {min_len: 5, max_len: 12}]; // TelFaxType
+  optional string fax = 2 [(buf.validate.field).string = {min_len: 5, max_len: 12}];      // TelFaxType
+  optional string email = 3 [(buf.validate.field).string.max_len = 256];                   // EmailContattiType
+}
+
+// ContattiTrasmittenteType - Contatti del trasmittente (senza fax)
+message ContattiTrasmittente {
+  optional string telefono = 1 [(buf.validate.field).string = {min_len: 5, max_len: 12}]; // TelFaxType
+  optional string email = 2 [(buf.validate.field).string.max_len = 256];                   // EmailContattiType
+}
+
+// IscrizioneREAType - Iscrizione al Registro delle Imprese
+message IscrizioneREA {
+  string ufficio = 1 [(buf.validate.field).string = {pattern: "^[A-Z]{2}$"}];        // ProvinciaType
+  string numeroREA = 2 [(buf.validate.field).string = {min_len: 1, max_len: 20}];    // String20Type
+  optional double capitaleSociale = 3;                                                 // Amount2DecimalType
+  optional SocioUnico socioUnico = 4;
+  StatoLiquidazione statoLiquidazione = 5 [(buf.validate.field).required = true];      // StatoLiquidazioneType
+}
+
+// ScontoMaggiorazioneType - Sconto o maggiorazione
+message ScontoMaggiorazione {
+  TipoScontoMaggiorazione tipo = 1 [(buf.validate.field).required = true]; // TipoScontoMaggiorazioneType
+  optional double percentuale = 2 [(buf.validate.field).double = {gte: 0, lte: 100}]; // RateType
+  optional double importo = 3; // Amount8DecimalType
+}
+
+// CodiceArticoloType - Codice articolo
+message CodiceArticolo {
+  string codiceTipo = 1 [(buf.validate.field).string = {min_len: 1, max_len: 35}];   // String35Type
+  string codiceValore = 2 [(buf.validate.field).string = {min_len: 1, max_len: 35}]; // String35LatinExtType
+}
+
+// AltriDatiGestionaliType - Altri dati gestionali per linee dettaglio
+message AltriDatiGestionali {
+  string tipoDato = 1 [(buf.validate.field).string = {min_len: 1, max_len: 10}];              // String10Type
+  optional string riferimentoTesto = 2 [(buf.validate.field).string = {min_len: 1, max_len: 60}]; // String60LatinType
+  optional double riferimentoNumero = 3; // Amount8DecimalType
+  optional string riferimentoData = 4;   // xs:date
+}

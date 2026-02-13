@@ -1,104 +1,98 @@
 syntax = "proto3";
+
 package eattura.sdi.v1;
 
-import "eattura/sdi/v1/options.proto";
+import "buf/validate/validate.proto";
+import "eattura/sdi/v1/common.proto";
+import "eattura/sdi/v1/enums.proto";
 
+// FatturaElettronicaHeaderType
 message FatturaElettronicaHeader {
-  DatiTrasmissione datiTrasmissione = 1;
-  CedentePrestatore cedentePrestatore = 2;
-  CessionarioCommittente cessionarioCommittente = 3;
-  TerzoIntermediarioOSoggettoEmittente terzoIntermediarioOSoggettoEmittente = 4;
+  DatiTrasmissione datiTrasmissione = 1 [(buf.validate.field).required = true];
+  CedentePrestatore cedentePrestatore = 2 [(buf.validate.field).required = true];
+  optional RappresentanteFiscale rappresentanteFiscale = 3;
+  CessionarioCommittente cessionarioCommittente = 4 [(buf.validate.field).required = true];
+  optional TerzoIntermediarioOSoggettoEmittente terzoIntermediarioOSoggettoEmittente = 5;
+  optional SoggettoEmittente soggettoEmittente = 6;
 }
 
-enum FormatoTrasmissione {
-  FORMATO_TRASMISSIONE_UNSPECIFIED = 0;
-  FORMATO_TRASMISSIONE_FPR12 = 10 [
-    (sdi).value = "FPR12",
-    (sdi).doc = "FatturaPR"
-  ]; // FatturaPR
-  FORMATO_TRASMISSIONE_FPA12 = 20 [
-    (sdi).value = "FPA12",
-    (sdi).doc = "FatturaPA"
-  ]; // FatturaPA
-}
-
+// DatiTrasmissioneType - Blocco relativo ai dati di trasmissione della Fattura Elettronica
 message DatiTrasmissione {
-  string idTrasmittente = 1;
-  string progressivoInvio = 2;
-  string formatoTrasmissione = 3;
-  string codiceDestinatario = 4;
-  string PECDestinatario = 5;
+  IdFiscale idTrasmittente = 1 [(buf.validate.field).required = true];
+  string progressivoInvio = 2 [(buf.validate.field).string = {min_len: 1, max_len: 10}];            // String10Type
+  FormatoTrasmissione formatoTrasmissione = 3 [(buf.validate.field).required = true];
+  string codiceDestinatario = 4 [(buf.validate.field).string = {pattern: "^[A-Z0-9]{6,7}$"}];       // CodiceDestinatarioType
+  optional ContattiTrasmittente contattiTrasmittente = 5;
+  optional string PECDestinatario = 6 [(buf.validate.field).string.max_len = 256];                   // EmailType
 }
 
+// CedentePrestatoreType - Blocco relativo ai dati del Cedente / Prestatore
 message CedentePrestatore {
-  DatiAnagrafici datiAnagrafici = 1;
-  Sede sede = 2;
-  StabileOrganizzazione stabileOrganizzazione = 3;
-  IscrizioneREA iscrizioneREA = 4;
-  Contatti contatti = 5;
-  RiferimentoAmministrazione riferimentoAmministrazione = 6;
+  DatiAnagraficiCedente datiAnagrafici = 1 [(buf.validate.field).required = true];
+  Indirizzo sede = 2 [(buf.validate.field).required = true];
+  optional Indirizzo stabileOrganizzazione = 3;
+  optional IscrizioneREA iscrizioneREA = 4;
+  optional Contatti contatti = 5;
+  optional string riferimentoAmministrazione = 6 [(buf.validate.field).string = {min_len: 1, max_len: 20}]; // String20Type
 }
 
+// DatiAnagraficiCedenteType
+message DatiAnagraficiCedente {
+  IdFiscale idFiscaleIVA = 1 [(buf.validate.field).required = true];
+  optional string codiceFiscale = 2 [(buf.validate.field).string = {pattern: "^[A-Z0-9]{11,16}$"}]; // CodiceFiscaleType
+  Anagrafica anagrafica = 3 [(buf.validate.field).required = true];
+  optional string alboProfessionale = 4 [(buf.validate.field).string = {min_len: 1, max_len: 60}];  // String60LatinType
+  optional string provinciaAlbo = 5 [(buf.validate.field).string = {pattern: "^[A-Z]{2}$"}];        // ProvinciaType
+  optional string numeroIscrizioneAlbo = 6 [(buf.validate.field).string = {min_len: 1, max_len: 60}]; // String60Type
+  optional string dataIscrizioneAlbo = 7; // xs:date
+  RegimeFiscale regimeFiscale = 8 [(buf.validate.field).required = true];
+}
+
+// RappresentanteFiscaleType - Blocco relativo ai dati del Rappresentante Fiscale
+message RappresentanteFiscale {
+  DatiAnagraficiRappresentante datiAnagrafici = 1 [(buf.validate.field).required = true];
+}
+
+// DatiAnagraficiRappresentanteType
+message DatiAnagraficiRappresentante {
+  IdFiscale idFiscaleIVA = 1 [(buf.validate.field).required = true];
+  optional string codiceFiscale = 2 [(buf.validate.field).string = {pattern: "^[A-Z0-9]{11,16}$"}]; // CodiceFiscaleType
+  Anagrafica anagrafica = 3 [(buf.validate.field).required = true];
+}
+
+// CessionarioCommittenteType - Blocco relativo ai dati del Cessionario / Committente
 message CessionarioCommittente {
-  DatiAnagrafici datiAnagrafici = 1;
-  Sede sede = 2;
-  StabileOrganizzazione stabileOrganizzazione = 3;
-  IscrizioneREA iscrizioneREA = 4;
-  Contatti contatti = 5;
-  RiferimentoAmministrazione riferimentoAmministrazione = 6;
+  DatiAnagraficiCessionario datiAnagrafici = 1 [(buf.validate.field).required = true];
+  Indirizzo sede = 2 [(buf.validate.field).required = true];
+  optional Indirizzo stabileOrganizzazione = 3;
+  optional RappresentanteFiscaleCessionario rappresentanteFiscale = 4;
 }
 
+// DatiAnagraficiCessionarioType
+message DatiAnagraficiCessionario {
+  optional IdFiscale idFiscaleIVA = 1;
+  optional string codiceFiscale = 2 [(buf.validate.field).string = {pattern: "^[A-Z0-9]{11,16}$"}]; // CodiceFiscaleType
+  Anagrafica anagrafica = 3 [(buf.validate.field).required = true];
+}
+
+// RappresentanteFiscaleCessionarioType
+message RappresentanteFiscaleCessionario {
+  IdFiscale idFiscaleIVA = 1 [(buf.validate.field).required = true];
+  oneof soggetto {
+    option (buf.validate.oneof).required = true;
+    string denominazione = 2 [(buf.validate.field).string = {min_len: 1, max_len: 80}]; // String80LatinType
+    PersonaFisica personaFisica = 3;
+  }
+}
+
+// TerzoIntermediarioSoggettoEmittenteType - Blocco relativo ai dati del Terzo Intermediario
 message TerzoIntermediarioOSoggettoEmittente {
-  DatiAnagrafici datiAnagrafici = 1;
-  Sede sede = 2;
-  StabileOrganizzazione stabileOrganizzazione = 3;
-  IscrizioneREA iscrizioneREA = 4;
-  Contatti contatti = 5;
-  RiferimentoAmministrazione riferimentoAmministrazione = 6;
+  DatiAnagraficiTerzoIntermediario datiAnagrafici = 1 [(buf.validate.field).required = true];
 }
 
-message DatiAnagrafici {
-  string idFiscaleIVA = 1;
-  string codiceFiscale = 2;
-  string anagrafica = 3;
-  string denominazione = 4;
-  string titolo = 5;
-  string cognome = 6;
-  string nome = 7;
-}
-
-message Sede {
-  string indirizzo = 1;
-  string numeroCivico = 2;
-  string cap = 3;
-  string comune = 4;
-  string provincia = 5;
-  string nazione = 6;
-}
-
-message StabileOrganizzazione {
-  string indirizzo = 1;
-  string numeroCivico = 2;
-  string cap = 3;
-  string comune = 4;
-  string provincia = 5;
-  string nazione = 6;
-}
-
-message IscrizioneREA {
-  string ufficio = 1;
-  string numeroREA = 2;
-  string capitaleSociale = 3;
-  string socioUnico = 4;
-  string statoLiquidazione = 5;
-}
-
-message Contatti {
-  string telefono = 1;
-  string fax = 2;
-  string email = 3;
-}
-
-message RiferimentoAmministrazione {
-  string riferimentoAmministrazione = 1;
+// DatiAnagraficiTerzoIntermediarioType
+message DatiAnagraficiTerzoIntermediario {
+  optional IdFiscale idFiscaleIVA = 1;
+  optional string codiceFiscale = 2 [(buf.validate.field).string = {pattern: "^[A-Z0-9]{11,16}$"}]; // CodiceFiscaleType
+  Anagrafica anagrafica = 3 [(buf.validate.field).required = true];
 }

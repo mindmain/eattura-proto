@@ -1,0 +1,633 @@
+syntax = "proto3";
+
+package eattura.sdi.v1;
+
+import "eattura/sdi/v1/options.proto";
+
+enum FormatoTrasmissione {
+  FORMATO_TRASMISSIONE_UNSPECIFIED = 0;
+  FORMATO_TRASMISSIONE_FPA12 = 10 [
+    (sdi).value = "FPA12",
+    (sdi).doc = "Fattura verso PA"
+  ];
+  FORMATO_TRASMISSIONE_FPR12 = 20 [
+    (sdi).value = "FPR12",
+    (sdi).doc = "Fattura verso privati"
+  ];
+}
+
+enum TipoDocumento {
+  TIPO_DOCUMENTO_UNSPECIFIED = 0;
+  TIPO_DOCUMENTO_TD01 = 10 [
+    (sdi).value = "TD01",
+    (sdi).doc = "Fattura"
+  ];
+  TIPO_DOCUMENTO_TD02 = 20 [
+    (sdi).value = "TD02",
+    (sdi).doc = "Acconto / anticipo su fattura"
+  ];
+  TIPO_DOCUMENTO_TD03 = 30 [
+    (sdi).value = "TD03",
+    (sdi).doc = "Acconto / anticipo su parcella"
+  ];
+  TIPO_DOCUMENTO_TD04 = 40 [
+    (sdi).value = "TD04",
+    (sdi).doc = "Nota di credito"
+  ];
+  TIPO_DOCUMENTO_TD05 = 50 [
+    (sdi).value = "TD05",
+    (sdi).doc = "Nota di debito"
+  ];
+  TIPO_DOCUMENTO_TD06 = 60 [
+    (sdi).value = "TD06",
+    (sdi).doc = "Parcella"
+  ];
+  TIPO_DOCUMENTO_TD16 = 160 [
+    (sdi).value = "TD16",
+    (sdi).doc = "Integrazione fattura reverse charge interno"
+  ];
+  TIPO_DOCUMENTO_TD17 = 170 [
+    (sdi).value = "TD17",
+    (sdi).doc = "Integrazione/autofattura per acquisto servizi dall'estero"
+  ];
+  TIPO_DOCUMENTO_TD18 = 180 [
+    (sdi).value = "TD18",
+    (sdi).doc = "Integrazione per acquisto di beni intracomunitari"
+  ];
+  TIPO_DOCUMENTO_TD19 = 190 [
+    (sdi).value = "TD19",
+    (sdi).doc = "Integrazione/autofattura per acquisto di beni ex art.17 c.2 DPR 633/72"
+  ];
+  TIPO_DOCUMENTO_TD20 = 200 [
+    (sdi).value = "TD20",
+    (sdi).doc = "Autofattura per regolarizzazione e integrazione delle fatture (ex art.6 c.8 e 9-bis d.lgs.471/97 o art.46 c.5 D.L. 331/93)"
+  ];
+  TIPO_DOCUMENTO_TD21 = 210 [
+    (sdi).value = "TD21",
+    (sdi).doc = "Autofattura per splafonamento"
+  ];
+  TIPO_DOCUMENTO_TD22 = 220 [
+    (sdi).value = "TD22",
+    (sdi).doc = "Estrazione beni da Deposito IVA"
+  ];
+  TIPO_DOCUMENTO_TD23 = 230 [
+    (sdi).value = "TD23",
+    (sdi).doc = "Estrazione beni da Deposito IVA con versamento dell'IVA"
+  ];
+  TIPO_DOCUMENTO_TD24 = 240 [
+    (sdi).value = "TD24",
+    (sdi).doc = "Fattura differita di cui all'art.21, comma 4, terzo periodo lett. a) DPR 633/72"
+  ];
+  TIPO_DOCUMENTO_TD25 = 250 [
+    (sdi).value = "TD25",
+    (sdi).doc = "Fattura differita di cui all'art.21, comma 4, terzo periodo lett. b) DPR 633/72"
+  ];
+  TIPO_DOCUMENTO_TD26 = 260 [
+    (sdi).value = "TD26",
+    (sdi).doc = "Cessione di beni ammortizzabili e per passaggi interni (ex art.36 DPR 633/72)"
+  ];
+  TIPO_DOCUMENTO_TD27 = 270 [
+    (sdi).value = "TD27",
+    (sdi).doc = "Fattura per autoconsumo o per cessioni gratuite senza rivalsa"
+  ];
+  TIPO_DOCUMENTO_TD28 = 280 [
+    (sdi).value = "TD28",
+    (sdi).doc = "Acquisti da San Marino con IVA (fattura cartacea)"
+  ];
+}
+
+enum TipoRitenuta {
+  TIPO_RITENUTA_UNSPECIFIED = 0;
+  TIPO_RITENUTA_RT01 = 10 [
+    (sdi).value = "RT01",
+    (sdi).doc = "Ritenuta di acconto persone fisiche"
+  ];
+  TIPO_RITENUTA_RT02 = 20 [
+    (sdi).value = "RT02",
+    (sdi).doc = "Ritenuta di acconto persone giuridiche"
+  ];
+  TIPO_RITENUTA_RT03 = 30 [
+    (sdi).value = "RT03",
+    (sdi).doc = "Contributo INPS"
+  ];
+  TIPO_RITENUTA_RT04 = 40 [
+    (sdi).value = "RT04",
+    (sdi).doc = "Contributo ENASARCO"
+  ];
+  TIPO_RITENUTA_RT05 = 50 [
+    (sdi).value = "RT05",
+    (sdi).doc = "Contributo ENPAM"
+  ];
+  TIPO_RITENUTA_RT06 = 60 [
+    (sdi).value = "RT06",
+    (sdi).doc = "Altro contributo previdenziale"
+  ];
+}
+
+enum TipoCassa {
+  TIPO_CASSA_UNSPECIFIED = 0;
+  TIPO_CASSA_TC01 = 10 [
+    (sdi).value = "TC01",
+    (sdi).doc = "Cassa nazionale previdenza e assistenza avvocati e procuratori legali"
+  ];
+  TIPO_CASSA_TC02 = 20 [
+    (sdi).value = "TC02",
+    (sdi).doc = "Cassa previdenza dottori commercialisti"
+  ];
+  TIPO_CASSA_TC03 = 30 [
+    (sdi).value = "TC03",
+    (sdi).doc = "Cassa previdenza e assistenza geometri"
+  ];
+  TIPO_CASSA_TC04 = 40 [
+    (sdi).value = "TC04",
+    (sdi).doc = "Cassa nazionale previdenza e assistenza ingegneri e architetti liberi professionisti"
+  ];
+  TIPO_CASSA_TC05 = 50 [
+    (sdi).value = "TC05",
+    (sdi).doc = "Cassa nazionale del notariato"
+  ];
+  TIPO_CASSA_TC06 = 60 [
+    (sdi).value = "TC06",
+    (sdi).doc = "Cassa nazionale previdenza e assistenza ragionieri e periti commerciali"
+  ];
+  TIPO_CASSA_TC07 = 70 [
+    (sdi).value = "TC07",
+    (sdi).doc = "Ente nazionale assistenza agenti e rappresentanti di commercio (ENASARCO)"
+  ];
+  TIPO_CASSA_TC08 = 80 [
+    (sdi).value = "TC08",
+    (sdi).doc = "Ente nazionale previdenza e assistenza consulenti del lavoro (ENPACL)"
+  ];
+  TIPO_CASSA_TC09 = 90 [
+    (sdi).value = "TC09",
+    (sdi).doc = "Ente nazionale previdenza e assistenza medici (ENPAM)"
+  ];
+  TIPO_CASSA_TC10 = 100 [
+    (sdi).value = "TC10",
+    (sdi).doc = "Ente nazionale previdenza e assistenza farmacisti (ENPAF)"
+  ];
+  TIPO_CASSA_TC11 = 110 [
+    (sdi).value = "TC11",
+    (sdi).doc = "Ente nazionale previdenza e assistenza veterinari (ENPAV)"
+  ];
+  TIPO_CASSA_TC12 = 120 [
+    (sdi).value = "TC12",
+    (sdi).doc = "Ente nazionale previdenza e assistenza impiegati dell'agricoltura (ENPAIA)"
+  ];
+  TIPO_CASSA_TC13 = 130 [
+    (sdi).value = "TC13",
+    (sdi).doc = "Fondo previdenza impiegati imprese di spedizione e agenzie marittime"
+  ];
+  TIPO_CASSA_TC14 = 140 [
+    (sdi).value = "TC14",
+    (sdi).doc = "Istituto nazionale previdenza giornalisti italiani (INPGI)"
+  ];
+  TIPO_CASSA_TC15 = 150 [
+    (sdi).value = "TC15",
+    (sdi).doc = "Opera nazionale assistenza orfani sanitari italiani (ONAOSI)"
+  ];
+  TIPO_CASSA_TC16 = 160 [
+    (sdi).value = "TC16",
+    (sdi).doc = "Cassa autonoma assistenza integrativa giornalisti italiani (CASAGIT)"
+  ];
+  TIPO_CASSA_TC17 = 170 [
+    (sdi).value = "TC17",
+    (sdi).doc = "Ente previdenza periti industriali e periti industriali laureati (EPPI)"
+  ];
+  TIPO_CASSA_TC18 = 180 [
+    (sdi).value = "TC18",
+    (sdi).doc = "Ente previdenza e assistenza pluricategoriale (EPAP)"
+  ];
+  TIPO_CASSA_TC19 = 190 [
+    (sdi).value = "TC19",
+    (sdi).doc = "Ente nazionale previdenza e assistenza biologi (ENPAB)"
+  ];
+  TIPO_CASSA_TC20 = 200 [
+    (sdi).value = "TC20",
+    (sdi).doc = "Ente nazionale previdenza e assistenza professione infermieristica (ENPAPI)"
+  ];
+  TIPO_CASSA_TC21 = 210 [
+    (sdi).value = "TC21",
+    (sdi).doc = "Ente nazionale previdenza e assistenza psicologi (ENPAP)"
+  ];
+  TIPO_CASSA_TC22 = 220 [
+    (sdi).value = "TC22",
+    (sdi).doc = "INPS"
+  ];
+}
+
+enum RegimeFiscale {
+  REGIME_FISCALE_UNSPECIFIED = 0;
+  REGIME_FISCALE_RF01 = 10 [
+    (sdi).value = "RF01",
+    (sdi).doc = "Regime ordinario"
+  ];
+  REGIME_FISCALE_RF02 = 20 [
+    (sdi).value = "RF02",
+    (sdi).doc = "Regime dei contribuenti minimi (art. 1,c.96-117, L. 244/2007)"
+  ];
+  REGIME_FISCALE_RF04 = 40 [
+    (sdi).value = "RF04",
+    (sdi).doc = "Agricoltura e attività connesse e pesca (artt. 34 e 34-bis, D.P.R. 633/1972)"
+  ];
+  REGIME_FISCALE_RF05 = 50 [
+    (sdi).value = "RF05",
+    (sdi).doc = "Vendita sali e tabacchi (art. 74, c.1, D.P.R. 633/1972)"
+  ];
+  REGIME_FISCALE_RF06 = 60 [
+    (sdi).value = "RF06",
+    (sdi).doc = "Commercio dei fiammiferi (art. 74, c.1, D.P.R. 633/1972)"
+  ];
+  REGIME_FISCALE_RF07 = 70 [
+    (sdi).value = "RF07",
+    (sdi).doc = "Editoria (art. 74, c.1, D.P.R. 633/1972)"
+  ];
+  REGIME_FISCALE_RF08 = 80 [
+    (sdi).value = "RF08",
+    (sdi).doc = "Gestione di servizi di telefonia pubblica (art. 74, c.1, D.P.R. 633/1972)"
+  ];
+  REGIME_FISCALE_RF09 = 90 [
+    (sdi).value = "RF09",
+    (sdi).doc = "Rivendita di documenti di trasporto pubblico e di sosta (art. 74, c.1, D.P.R. 633/1972)"
+  ];
+  REGIME_FISCALE_RF10 = 100 [
+    (sdi).value = "RF10",
+    (sdi).doc = "Intrattenimenti, giochi e altre attività di cui alla tariffa allegata al D.P.R. 640/72 (art. 74, c.6, D.P.R. 633/1972)"
+  ];
+  REGIME_FISCALE_RF11 = 110 [
+    (sdi).value = "RF11",
+    (sdi).doc = "Agenzie di viaggi e turismo (art. 74-ter, D.P.R. 633/1972)"
+  ];
+  REGIME_FISCALE_RF12 = 120 [
+    (sdi).value = "RF12",
+    (sdi).doc = "Agriturismo (art. 5, c.2, L. 413/1991)"
+  ];
+  REGIME_FISCALE_RF13 = 130 [
+    (sdi).value = "RF13",
+    (sdi).doc = "Vendite a domicilio (art. 25-bis, c.6, D.P.R. 600/1973)"
+  ];
+  REGIME_FISCALE_RF14 = 140 [
+    (sdi).value = "RF14",
+    (sdi).doc = "Rivendita di beni usati, di oggetti d'arte, d'antiquariato o da collezione (art. 36, D.L. 41/1995)"
+  ];
+  REGIME_FISCALE_RF15 = 150 [
+    (sdi).value = "RF15",
+    (sdi).doc = "Agenzie di vendite all'asta di oggetti d'arte, antiquariato o da collezione (art. 40-bis, D.L. 41/1995)"
+  ];
+  REGIME_FISCALE_RF16 = 160 [
+    (sdi).value = "RF16",
+    (sdi).doc = "IVA per cassa P.A. (art. 6, c.5, D.P.R. 633/1972)"
+  ];
+  REGIME_FISCALE_RF17 = 170 [
+    (sdi).value = "RF17",
+    (sdi).doc = "IVA per cassa (art. 32-bis, D.L. 83/2012)"
+  ];
+  REGIME_FISCALE_RF18 = 180 [
+    (sdi).value = "RF18",
+    (sdi).doc = "Altro"
+  ];
+  REGIME_FISCALE_RF19 = 190 [
+    (sdi).value = "RF19",
+    (sdi).doc = "Regime forfettario"
+  ];
+}
+
+enum CausalePagamento {
+  CAUSALE_PAGAMENTO_UNSPECIFIED = 0;
+  CAUSALE_PAGAMENTO_A = 10 [
+    (sdi).value = "A",
+    (sdi).doc = "Prestazioni di lavoro autonomo rientranti nell'esercizio di arte o professione abituale"
+  ];
+  CAUSALE_PAGAMENTO_B = 20 [
+    (sdi).value = "B",
+    (sdi).doc = "Utilizzazione economica di opere dell'ingegno, brevetti industriali e simili"
+  ];
+  CAUSALE_PAGAMENTO_C = 30 [
+    (sdi).value = "C",
+    (sdi).doc = "Utili derivanti da contratti di associazione in partecipazione e cointeressenza"
+  ];
+  CAUSALE_PAGAMENTO_D = 40 [
+    (sdi).value = "D",
+    (sdi).doc = "Utili spettanti ai soci promotori e ai soci fondatori delle società di capitali"
+  ];
+  CAUSALE_PAGAMENTO_E = 50 [
+    (sdi).value = "E",
+    (sdi).doc = "Levata di protesti cambiari da parte dei segretari comunali"
+  ];
+  CAUSALE_PAGAMENTO_G = 60 [
+    (sdi).value = "G",
+    (sdi).doc = "Indennità corrisposte per la cessazione di attività sportiva professionale"
+  ];
+  CAUSALE_PAGAMENTO_H = 70 [
+    (sdi).value = "H",
+    (sdi).doc = "Indennità corrisposte per la cessazione dei rapporti di agenzia"
+  ];
+  CAUSALE_PAGAMENTO_I = 80 [
+    (sdi).value = "I",
+    (sdi).doc = "Indennità corrisposte per la cessazione da funzioni notarili"
+  ];
+  CAUSALE_PAGAMENTO_L = 90 [
+    (sdi).value = "L",
+    (sdi).doc = "Utilizzazione economica di opere dell'ingegno, brevetti industriali e simili da parte dell'autore o inventore"
+  ];
+  CAUSALE_PAGAMENTO_M = 100 [
+    (sdi).value = "M",
+    (sdi).doc = "Prestazioni di lavoro autonomo non esercitate abitualmente"
+  ];
+  CAUSALE_PAGAMENTO_N = 110 [
+    (sdi).value = "N",
+    (sdi).doc = "Indennità di trasferta, rimborso forfetario di spese, premi e compensi erogati nell'esercizio diretto di attività sportive dilettantistiche"
+  ];
+  CAUSALE_PAGAMENTO_O = 120 [
+    (sdi).value = "O",
+    (sdi).doc = "Prestazioni di lavoro autonomo non esercitate abitualmente, obblighi di fare, non fare o permettere"
+  ];
+  CAUSALE_PAGAMENTO_P = 130 [
+    (sdi).value = "P",
+    (sdi).doc = "Compensi corrisposti a soggetti non residenti privi di stabile organizzazione"
+  ];
+  CAUSALE_PAGAMENTO_Q = 140 [
+    (sdi).value = "Q",
+    (sdi).doc = "Provvigioni corrisposte ad agente o rappresentante di commercio monomandatario"
+  ];
+  CAUSALE_PAGAMENTO_R = 150 [
+    (sdi).value = "R",
+    (sdi).doc = "Provvigioni corrisposte ad agente o rappresentante di commercio plurimandatario"
+  ];
+  CAUSALE_PAGAMENTO_S = 160 [
+    (sdi).value = "S",
+    (sdi).doc = "Provvigioni corrisposte a commissionario"
+  ];
+  CAUSALE_PAGAMENTO_T = 170 [
+    (sdi).value = "T",
+    (sdi).doc = "Provvigioni corrisposte a mediatore"
+  ];
+  CAUSALE_PAGAMENTO_U = 180 [
+    (sdi).value = "U",
+    (sdi).doc = "Provvigioni corrisposte a procacciatore di affari"
+  ];
+  CAUSALE_PAGAMENTO_V = 190 [
+    (sdi).value = "V",
+    (sdi).doc = "Provvigioni corrisposte a incaricato per le vendite a domicilio e porta a porta"
+  ];
+  CAUSALE_PAGAMENTO_W = 200 [
+    (sdi).value = "W",
+    (sdi).doc = "Corrispettivi erogati nel 2013 per prestazioni relative a contratti d'appalto"
+  ];
+  CAUSALE_PAGAMENTO_X = 210 [
+    (sdi).value = "X",
+    (sdi).doc = "Canoni corrisposti nel 2004 da società o enti residenti"
+  ];
+  CAUSALE_PAGAMENTO_Y = 220 [
+    (sdi).value = "Y",
+    (sdi).doc = "Canoni corrisposti dal 2005 da società o enti residenti"
+  ];
+  CAUSALE_PAGAMENTO_Z = 230 [
+    (sdi).value = "Z",
+    (sdi).doc = "Titolo diverso dai precedenti (non più valido dal 01/01/2021)"
+  ];
+  CAUSALE_PAGAMENTO_L1 = 240 [
+    (sdi).value = "L1",
+    (sdi).doc = "Redditi derivanti dall'utilizzazione economica di opere dell'ingegno, di brevetti industriali e di processi, formule e informazioni relativi ad esperienze acquisite in campo industriale, commerciale o scientifico, che sono corrisposti da soggetti non residenti"
+  ];
+  CAUSALE_PAGAMENTO_M1 = 250 [
+    (sdi).value = "M1",
+    (sdi).doc = "Proventi derivanti dall'assunzione di obblighi di fare, non fare o permettere"
+  ];
+  CAUSALE_PAGAMENTO_M2 = 260 [
+    (sdi).value = "M2",
+    (sdi).doc = "Prestazioni di lavoro autonomo non esercitate abitualmente per le quali non sussiste l'obbligo di iscrizione alla gestione separata"
+  ];
+  CAUSALE_PAGAMENTO_O1 = 270 [
+    (sdi).value = "O1",
+    (sdi).doc = "Prestazioni di lavoro autonomo non esercitate abitualmente, per le quali non sussiste l'obbligo di iscrizione alla gestione separata, rese da soggetti non residenti"
+  ];
+  CAUSALE_PAGAMENTO_V1 = 280 [
+    (sdi).value = "V1",
+    (sdi).doc = "Redditi derivanti da attività commerciali non esercitate abitualmente"
+  ];
+  CAUSALE_PAGAMENTO_ZO = 290 [
+    (sdi).value = "ZO",
+    (sdi).doc = "Titolo diverso dai precedenti"
+  ];
+}
+
+enum TipoScontoMaggiorazione {
+  TIPO_SCONTO_MAGGIORAZIONE_UNSPECIFIED = 0;
+  TIPO_SCONTO_MAGGIORAZIONE_SC = 10 [
+    (sdi).value = "SC",
+    (sdi).doc = "Sconto"
+  ];
+  TIPO_SCONTO_MAGGIORAZIONE_MG = 20 [
+    (sdi).value = "MG",
+    (sdi).doc = "Maggiorazione"
+  ];
+}
+
+enum Art73 {
+  ART73_UNSPECIFIED = 0;
+  ART73_SI = 10 [
+    (sdi).value = "SI",
+    (sdi).doc = "Documento emesso secondo modalità e termini stabiliti con DM ai sensi dell'art. 73 DPR 633/72"
+  ];
+}
+
+enum BolloVirtuale {
+  BOLLO_VIRTUALE_UNSPECIFIED = 0;
+  BOLLO_VIRTUALE_SI = 10 [
+    (sdi).value = "SI",
+    (sdi).doc = "Bollo assolto ai sensi del decreto MEF 17 giugno 2014"
+  ];
+}
+
+enum Ritenuta {
+  RITENUTA_UNSPECIFIED = 0;
+  RITENUTA_SI = 10 [
+    (sdi).value = "SI",
+    (sdi).doc = "Cessione / Prestazione soggetta a ritenuta"
+  ];
+}
+
+enum SoggettoEmittente {
+  SOGGETTO_EMITTENTE_UNSPECIFIED = 0;
+  SOGGETTO_EMITTENTE_CC = 10 [
+    (sdi).value = "CC",
+    (sdi).doc = "Cessionario / Committente"
+  ];
+  SOGGETTO_EMITTENTE_TZ = 20 [
+    (sdi).value = "TZ",
+    (sdi).doc = "Terzo"
+  ];
+}
+
+enum SocioUnico {
+  SOCIO_UNICO_UNSPECIFIED = 0;
+  SOCIO_UNICO_SU = 10 [
+    (sdi).value = "SU",
+    (sdi).doc = "Socio unico"
+  ];
+  SOCIO_UNICO_SM = 20 [
+    (sdi).value = "SM",
+    (sdi).doc = "Più soci"
+  ];
+}
+
+enum StatoLiquidazione {
+  STATO_LIQUIDAZIONE_UNSPECIFIED = 0;
+  STATO_LIQUIDAZIONE_LS = 10 [
+    (sdi).value = "LS",
+    (sdi).doc = "In liquidazione"
+  ];
+  STATO_LIQUIDAZIONE_LN = 20 [
+    (sdi).value = "LN",
+    (sdi).doc = "Non in liquidazione"
+  ];
+}
+
+enum TipoCessionePrestazione {
+  TIPO_CESSIONE_PRESTAZIONE_UNSPECIFIED = 0;
+  TIPO_CESSIONE_PRESTAZIONE_SC = 10 [
+    (sdi).value = "SC",
+    (sdi).doc = "Sconto"
+  ];
+  TIPO_CESSIONE_PRESTAZIONE_PR = 20 [
+    (sdi).value = "PR",
+    (sdi).doc = "Premio"
+  ];
+  TIPO_CESSIONE_PRESTAZIONE_AB = 30 [
+    (sdi).value = "AB",
+    (sdi).doc = "Abbuono"
+  ];
+  TIPO_CESSIONE_PRESTAZIONE_AC = 40 [
+    (sdi).value = "AC",
+    (sdi).doc = "Spesa accessoria"
+  ];
+}
+
+enum CondizioniPagamento {
+  CONDIZIONI_PAGAMENTO_UNSPECIFIED = 0;
+  CONDIZIONI_PAGAMENTO_TP01 = 10 [
+    (sdi).value = "TP01",
+    (sdi).doc = "Pagamento a rate"
+  ];
+  CONDIZIONI_PAGAMENTO_TP02 = 20 [
+    (sdi).value = "TP02",
+    (sdi).doc = "Pagamento completo"
+  ];
+  CONDIZIONI_PAGAMENTO_TP03 = 30 [
+    (sdi).value = "TP03",
+    (sdi).doc = "Anticipo"
+  ];
+}
+
+enum ModalitaPagamento {
+  MODALITA_PAGAMENTO_UNSPECIFIED = 0;
+  MODALITA_PAGAMENTO_MP01 = 10 [
+    (sdi).value = "MP01",
+    (sdi).doc = "Contanti"
+  ];
+  MODALITA_PAGAMENTO_MP02 = 20 [
+    (sdi).value = "MP02",
+    (sdi).doc = "Assegno"
+  ];
+  MODALITA_PAGAMENTO_MP03 = 30 [
+    (sdi).value = "MP03",
+    (sdi).doc = "Assegno circolare"
+  ];
+  MODALITA_PAGAMENTO_MP04 = 40 [
+    (sdi).value = "MP04",
+    (sdi).doc = "Contanti presso Tesoreria"
+  ];
+  MODALITA_PAGAMENTO_MP05 = 50 [
+    (sdi).value = "MP05",
+    (sdi).doc = "Bonifico"
+  ];
+  MODALITA_PAGAMENTO_MP06 = 60 [
+    (sdi).value = "MP06",
+    (sdi).doc = "Vaglia cambiario"
+  ];
+  MODALITA_PAGAMENTO_MP07 = 70 [
+    (sdi).value = "MP07",
+    (sdi).doc = "Bollettino bancario"
+  ];
+  MODALITA_PAGAMENTO_MP08 = 80 [
+    (sdi).value = "MP08",
+    (sdi).doc = "Carta di pagamento"
+  ];
+  MODALITA_PAGAMENTO_MP09 = 90 [
+    (sdi).value = "MP09",
+    (sdi).doc = "RID"
+  ];
+  MODALITA_PAGAMENTO_MP10 = 100 [
+    (sdi).value = "MP10",
+    (sdi).doc = "RID utenze"
+  ];
+  MODALITA_PAGAMENTO_MP11 = 110 [
+    (sdi).value = "MP11",
+    (sdi).doc = "RID veloce"
+  ];
+  MODALITA_PAGAMENTO_MP12 = 120 [
+    (sdi).value = "MP12",
+    (sdi).doc = "RIBA"
+  ];
+  MODALITA_PAGAMENTO_MP13 = 130 [
+    (sdi).value = "MP13",
+    (sdi).doc = "MAV"
+  ];
+  MODALITA_PAGAMENTO_MP14 = 140 [
+    (sdi).value = "MP14",
+    (sdi).doc = "Quietanza erario"
+  ];
+  MODALITA_PAGAMENTO_MP15 = 150 [
+    (sdi).value = "MP15",
+    (sdi).doc = "Giroconto su conti di contabilità speciale"
+  ];
+  MODALITA_PAGAMENTO_MP16 = 160 [
+    (sdi).value = "MP16",
+    (sdi).doc = "Domiciliazione bancaria"
+  ];
+  MODALITA_PAGAMENTO_MP17 = 170 [
+    (sdi).value = "MP17",
+    (sdi).doc = "Domiciliazione postale"
+  ];
+  MODALITA_PAGAMENTO_MP18 = 180 [
+    (sdi).value = "MP18",
+    (sdi).doc = "Bollettino di c/c postale"
+  ];
+  MODALITA_PAGAMENTO_MP19 = 190 [
+    (sdi).value = "MP19",
+    (sdi).doc = "SEPA Direct Debit"
+  ];
+  MODALITA_PAGAMENTO_MP20 = 200 [
+    (sdi).value = "MP20",
+    (sdi).doc = "SEPA Direct Debit CORE"
+  ];
+  MODALITA_PAGAMENTO_MP21 = 210 [
+    (sdi).value = "MP21",
+    (sdi).doc = "SEPA Direct Debit B2B"
+  ];
+  MODALITA_PAGAMENTO_MP22 = 220 [
+    (sdi).value = "MP22",
+    (sdi).doc = "Trattenuta su somme già riscosse"
+  ];
+  MODALITA_PAGAMENTO_MP23 = 230 [
+    (sdi).value = "MP23",
+    (sdi).doc = "PagoPA"
+  ];
+}
+
+enum EsigibilitaIVA {
+  ESIGIBILITA_IVA_UNSPECIFIED = 0;
+  ESIGIBILITA_IVA_D = 10 [
+    (sdi).value = "D",
+    (sdi).doc = "Esigibilità differita"
+  ];
+  ESIGIBILITA_IVA_I = 20 [
+    (sdi).value = "I",
+    (sdi).doc = "Esigibilità immediata"
+  ];
+  ESIGIBILITA_IVA_S = 30 [
+    (sdi).value = "S",
+    (sdi).doc = "Scissione dei pagamenti"
+  ];
+}

@@ -2,11 +2,15 @@ syntax = "proto3";
 
 package eattura.sdi.v1;
 
+import "buf/validate/validate.proto";
 import "eattura/sdi/v1/body.proto";
+import "eattura/sdi/v1/enums.proto";
 import "eattura/sdi/v1/header.proto";
 
+// FatturaElettronicaType - XML schema fatture destinate a PA e privati in forma ordinaria 1.2.2
 message FatturaElettronica {
-  string version = 1;
-  FatturaElettronicaHeader header = 2;
-  FatturaElettronicaBody body = 3;
+  FormatoTrasmissione versione = 1 [(buf.validate.field).required = true];
+  optional string sistemaEmittente = 2 [(buf.validate.field).string = {min_len: 1, max_len: 10}]; // String10Type
+  FatturaElettronicaHeader header = 3 [(buf.validate.field).required = true];
+  repeated FatturaElettronicaBody body = 4 [(buf.validate.field).repeated.min_items = 1];          // maxOccurs="unbounded"
 }
