@@ -1,0 +1,104 @@
+syntax = "proto3";
+package eattura.sdi.v1;
+
+import "eattura/sdi/v1/options.proto";
+
+message FatturaElettronicaHeader {
+  DatiTrasmissione datiTrasmissione = 1;
+  CedentePrestatore cedentePrestatore = 2;
+  CessionarioCommittente cessionarioCommittente = 3;
+  TerzoIntermediarioOSoggettoEmittente terzoIntermediarioOSoggettoEmittente = 4;
+}
+
+enum FormatoTrasmissione {
+  FORMATO_TRASMISSIONE_UNSPECIFIED = 0;
+  FORMATO_TRASMISSIONE_FPR12 = 10 [
+    (sdi).value = "FPR12",
+    (sdi).doc = "FatturaPR"
+  ]; // FatturaPR
+  FORMATO_TRASMISSIONE_FPA12 = 20 [
+    (sdi).value = "FPA12",
+    (sdi).doc = "FatturaPA"
+  ]; // FatturaPA
+}
+
+message DatiTrasmissione {
+  string idTrasmittente = 1;
+  string progressivoInvio = 2;
+  string formatoTrasmissione = 3;
+  string codiceDestinatario = 4;
+  string PECDestinatario = 5;
+}
+
+message CedentePrestatore {
+  DatiAnagrafici datiAnagrafici = 1;
+  Sede sede = 2;
+  StabileOrganizzazione stabileOrganizzazione = 3;
+  IscrizioneREA iscrizioneREA = 4;
+  Contatti contatti = 5;
+  RiferimentoAmministrazione riferimentoAmministrazione = 6;
+}
+
+message CessionarioCommittente {
+  DatiAnagrafici datiAnagrafici = 1;
+  Sede sede = 2;
+  StabileOrganizzazione stabileOrganizzazione = 3;
+  IscrizioneREA iscrizioneREA = 4;
+  Contatti contatti = 5;
+  RiferimentoAmministrazione riferimentoAmministrazione = 6;
+}
+
+message TerzoIntermediarioOSoggettoEmittente {
+  DatiAnagrafici datiAnagrafici = 1;
+  Sede sede = 2;
+  StabileOrganizzazione stabileOrganizzazione = 3;
+  IscrizioneREA iscrizioneREA = 4;
+  Contatti contatti = 5;
+  RiferimentoAmministrazione riferimentoAmministrazione = 6;
+}
+
+message DatiAnagrafici {
+  string idFiscaleIVA = 1;
+  string codiceFiscale = 2;
+  string anagrafica = 3;
+  string denominazione = 4;
+  string titolo = 5;
+  string cognome = 6;
+  string nome = 7;
+}
+
+message Sede {
+  string indirizzo = 1;
+  string numeroCivico = 2;
+  string cap = 3;
+  string comune = 4;
+  string provincia = 5;
+  string nazione = 6;
+}
+
+message StabileOrganizzazione {
+  string indirizzo = 1;
+  string numeroCivico = 2;
+  string cap = 3;
+  string comune = 4;
+  string provincia = 5;
+  string nazione = 6;
+}
+
+message IscrizioneREA {
+  string ufficio = 1;
+  string numeroREA = 2;
+  string capitaleSociale = 3;
+  string socioUnico = 4;
+  string statoLiquidazione = 5;
+}
+
+message Contatti {
+  string telefono = 1;
+  string fax = 2;
+  string email = 3;
+}
+
+message RiferimentoAmministrazione {
+  string riferimentoAmministrazione = 1;
+}

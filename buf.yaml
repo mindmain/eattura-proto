@@ -2,9 +2,12 @@ version: v2
 name: buf.build/mindmain/eattura-proto
 deps:
   - buf.build/bufbuild/protovalidate
+
 lint:
   use:
-    - DEFAULT
+    - STANDARD
+  except:
+    - FIELD_LOWER_SNAKE_CASE
 breaking:
   use:
     - FILE

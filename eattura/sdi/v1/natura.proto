@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package eattura.sdi.v1;
+
+import "eattura/sdi/v1/options.proto";
+
+enum Natura {
+  NATURA_N_UNSPECIFIED = 0;
+  NATURA_N_1 = 10 [
+    (sdi).value = "N1",
+    (sdi).doc = "escluse ex art.15"
+  ];
+  NATURA_N_2 = 30 [
+    (sdi).value = "N2",
+    (sdi).doc = "non soggette"
+  ];
+  NATURA_N_2_1 = 50 [
+    (sdi).value = "N2.1",
+    (sdi).doc = "non soggette ad IVA ai sensi degli artt. Da 7 a 7-septies del DPR 633/72"
+  ];
+  NATURA_N_2_2 = 70 [
+    (sdi).value = "N2.2",
+    (sdi).doc = "non soggette – altri casi"
+  ];
+  NATURA_N_3 = 90 [
+    (sdi).value = "N3",
+    (sdi).doc = "non imponibili"
+  ];
+  NATURA_N_3_1 = 110 [
+    (sdi).value = "N3.1",
+    (sdi).doc = "non imponibili – esportazioni"
+  ];
+  NATURA_N_3_2 = 130 [
+    (sdi).value = "N3.2",
+    (sdi).doc = "non imponibili – cessioni intracomunitarie"
+  ];
+  NATURA_N_3_3 = 150 [
+    (sdi).value = "N3.3",
+    (sdi).doc = "non imponibili – cessioni verso San Marino"
+  ];
+  NATURA_N_3_4 = 170 [
+    (sdi).value = "N3.4",
+    (sdi).doc = "non imponibili – operazioni assimilate alle cessioni all’esportazione"
+  ];
+  NATURA_N_3_5 = 190 [
+    (sdi).value = "N3.5",
+    (sdi).doc = "non imponibili – a seguito di dichiarazioni d’intento"
+  ];
+  NATURA_N_3_6 = 210 [
+    (sdi).value = "N3.6",
+    (sdi).doc = "non imponibili – altre operazioni che non concorrono alla formazione del plafond"
+  ];
+  NATURA_N_4 = 230 [
+    (sdi).value = "N4",
+    (sdi).doc = "esenti"
+  ];
+  NATURA_N_5 = 250 [
+    (sdi).value = "N5",
+    (sdi).doc = "regime del margine / IVA non esposta in fattura"
+  ];
+  NATURA_N_6 = 270 [
+    (sdi).value = "N6",
+    (sdi).doc = "inversione contabile (per le operazioni in reverse charge ovvero nei casi di autofatturazione per acquisti extra UE di servizi ovvero per importazioni di beni nei soli casi previsti)"
+  ];
+  NATURA_N_6_1 = 290 [
+    (sdi).value = "N6.1",
+    (sdi).doc = "inversione contabile – cessione di rottami e altri materiali di recupero"
+  ];
+  NATURA_N_6_2 = 310 [
+    (sdi).value = "N6.2",
+    (sdi).doc = "inversione contabile – cessione di oro e argento puro"
+  ];
+  NATURA_N_6_3 = 330 [
+    (sdi).value = "N6.3",
+    (sdi).doc = "inversione contabile – subappalto nel settore edile"
+  ];
+  NATURA_N_6_4 = 350 [
+    (sdi).value = "N6.4",
+    (sdi).doc = "inversione contabile – cessione di fabbricati"
+  ];
+  NATURA_N_6_5 = 370 [
+    (sdi).value = "N6.5",
+    (sdi).doc = "inversione contabile – cessione di telefoni cellulari"
+  ];
+  NATURA_N_6_6 = 390 [
+    (sdi).value = "N6.6",
+    (sdi).doc = "inversione contabile – cessione di prodotti elettronici"
+  ];
+  NATURA_N_6_7 = 410 [
+    (sdi).value = "N6.7",
+    (sdi).doc = "inversione contabile – prestazioni comparto edile e settori connessi"
+  ];
+  NATURA_N_6_8 = 430 [
+    (sdi).value = "N6.8",
+    (sdi).doc = "inversione contabile – operazioni settore energetico"
+  ];
+  NATURA_N_6_9 = 450 [
+    (sdi).value = "N6.9",
+    (sdi).doc = "inversione contabile – altri casi"
+  ];
+  NATURA_N_7 = 470 [
+    (sdi).value = "N7",
+    (sdi).doc = "IVA assolta in altro stato UE (vendite a distanza ex art. 40 commi 3 e 4 e art. 41 comma 1 lett. b, DL 331/93; prestazione di servizi di telecomunicazioni, tele-radiodiffusione ed elettronici ex art. 7-sexies lett. f, g, DPR 633/72 e art. 74-sexies, DPR 633/72)"
+  ];
+}

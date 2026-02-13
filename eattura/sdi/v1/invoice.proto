@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package eattura.sdi.v1;
+
+import "eattura/sdi/v1/body.proto";
+import "eattura/sdi/v1/header.proto";
+
+message FatturaElettronica {
+  string version = 1;
+  FatturaElettronicaHeader header = 2;
+  FatturaElettronicaBody body = 3;
+}

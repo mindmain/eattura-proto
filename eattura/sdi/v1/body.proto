@@ -1,0 +1,49 @@
+syntax = "proto3";
+package eattura.sdi.v1;
+
+message FatturaElettronicaBody {
+    DatiGenerali datiGenerali = 1;
+    DatiBeniServizi datiBeniServizi = 2;
+    DatiPagamento datiPagamento = 3;
+}
+
+message DatiGenerali {
+    string tipoDocumento = 1;
+    string divisa = 2;
+    string data = 3;
+    string numero = 4;
+    string importoTotaleDocumento = 5;
+    string causale = 6;
+    string riferimentoTesto = 7;
+}
+
+message DatiBeniServizi {
+    repeated DettaglioLinee dettaglioLinee = 1;
+}
+
+message DettaglioLinee {
+    string numeroLinea = 1;
+    string codiceArticolo = 2;
+    string descrizione = 3;
+    string quantita = 4;
+    string unitaMisura = 5;
+    string prezzoUnitario = 6;
+    string prezzoTotale = 7;
+    string aliquotaIVA = 8;
+}
+
+
+message DatiPagamento {
+    string condizioniPagamento = 1;
+    string modalitaPagamento = 2;
+    string dataScadenzaPagamento = 3;
+    string importoPagamento = 4;
+}
+
+
+message DatiRitenuta {
+    string tipoRitenuta = 1;
+    string importoRitenuta = 2;
+    string aliquotaRitenuta = 3;
+    string causalePagamento = 4;
+}
